@@ -1,32 +1,45 @@
 ---
     steps:
         -
-            name: check-zip
+            name: 'check zip'
             action: check-files
-            action-formal-rule: zip-check
+            action-formal-rule:
+                -
+                    name: 'xlogin00.tar.gz'
+                    archive:
+                        format: tar
+                        compression: off
+                        max-size: 5MB
         -
             name: unzip
             action: unzip
         -
             name: formal
             action: check-files
-            action-formal-rule: content-check
+            action-formal-rule:
+                -
+                    name: example-folder
+                    type: folder
+                -
+                    name: example-folder/main.c
+                    type: file
+                -
+                    name: example-folder/Makefile
+                    type: file
+                -
+                    name: example-folder/README.md
+                    type: file
         -
             name: build
             action: custom
-            action-cmd: "make all"
+            action-cmd: "cd example-folder && make all"
         -
             name: test
             action: custom
-            action-cmd: ""
+            action-cmd: "cd example-folder && ./main"
             skip-on-error: true
         -
             name: clean
             action: custom
-            action-cmd: "make clean"
-
-    checks:
-        - zip-check
-        - content-check
-
+            action-cmd: "cd example-folder && make clean"
         
