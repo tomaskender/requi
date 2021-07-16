@@ -1,0 +1,32 @@
+---
+    steps:
+        -
+            name: check-zip
+            action: check-files
+            action-formal-rule: zip-check
+        -
+            name: unzip
+            action: unzip
+        -
+            name: formal
+            action: check-files
+            action-formal-rule: content-check
+        -
+            name: build
+            action: custom
+            action-cmd: "make all"
+        -
+            name: test
+            action: custom
+            action-cmd: ""
+            skip-on-error: true
+        -
+            name: clean
+            action: custom
+            action-cmd: "make clean"
+
+    checks:
+        - zip-check
+        - content-check
+
+        
