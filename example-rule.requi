@@ -6,6 +6,7 @@
             action-formal-rule:
                 -
                     name: 'xlogin00.tar.gz'
+                    type: file
                     archive:
                         format: tar
                         compression: off
@@ -33,13 +34,16 @@
             name: build
             action: custom
             action-cmd: "cd example-folder && make all"
+            action-code: 0
         -
             name: test
             action: custom
             action-cmd: "cd example-folder && ./main"
+            action-code: 0
             skip-on-error: true
         -
             name: clean
             action: custom
             action-cmd: "cd example-folder && make clean"
+            action-code: 0
         

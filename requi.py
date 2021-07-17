@@ -3,9 +3,8 @@ import yaml
 import tempfile
 import shutil
 import argparse
-import subprocess
 from utils.progressbar import progress
-from actions import archive
+from actions import archive, command
 
 class Worker:
     def __init__(self):
@@ -35,7 +34,16 @@ class Worker:
         elif step_action == 'unzip':
             archive.unzip(self.checked_file, self.working_dir.name)
         elif step_action == 'custom':
-            output = subprocess.check_output([step['action-cmd']], shell=True, cwd=self.working_dir.name)
+            ret_code = None
+            if 'action-code' in step:
+                ret_code = step['action-code']
+            ret_output = None
+            if 'action-output' in step:
+                ret_output = step['action-output']
+            
+            success = command.execute_command(step['action-cmd'], self.working_dir.name, ret_code, ret_output)
+            if not success:
+                raise Exception('Step ' + step['name'] + ' failed.')
         else:
             raise Exception('Unrecognized action in step "' + step['name'] + '".')
 
